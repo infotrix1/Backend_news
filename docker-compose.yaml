@@ -1,0 +1,56 @@
+services:
+  app:
+    image: laravelphp/php-fpm:8.0
+    container_name: laravel_news
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    networks:
+      - app_network
+    depends_on:
+      - db
+    ports:
+      - "8001:8000"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=news_db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+
+  db:
+    image: mysql:5.7
+    container_name: mysql_db
+    restart: always
+    networks:
+      - app_network
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: laravel_user
+      MYSQL_PASSWORD: secret
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+  queue-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: queue_jobs
+    restart: unless-stopped
+    networks:
+      - app_network
+    depends_on:
+      - db
+    command: php artisan queue:work
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local
