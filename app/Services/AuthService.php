@@ -64,9 +64,5 @@ class AuthService
         JWTAuth::invalidate(JWTAuth::getToken());
     }
 
-    public function getUser(): User
-    {
-        return auth()->user();
-    }
 }
 

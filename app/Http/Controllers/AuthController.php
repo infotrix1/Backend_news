@@ -45,13 +45,5 @@ class AuthController extends Controller
         }
     }
 
-    public function user()
-    {
-        try {
-            $user = $this->authService->getUser();
-            return response()->json(['user' => $user], 200);
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
-        }
-    }
+
 }

@@ -104,5 +104,23 @@ class NewsService
         return null;
     }
 
+
+    public function getNews($request)
+    {
+        $filters = $request->get('filters') ?? [];
+        $keyword = $request->get('keyword')??"";
+        return $this->newsRepository->getNews($filters, $keyword);
+    }
+
+    public function getCategories()
+    {
+        return $this->newsRepository->categories();
+    }
+
+    public function getAuthors()
+    {
+        return $this->newsRepository->authors();
+    }
+
 }
 
