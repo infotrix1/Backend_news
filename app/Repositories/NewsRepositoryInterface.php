@@ -8,6 +8,8 @@ interface NewsRepositoryInterface
 
     public function getNews($filters, $keyword);
 
+    public function getFeaturedNews();
+
     public function categories();
 
     public function authors();

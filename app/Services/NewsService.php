@@ -112,6 +112,11 @@ class NewsService
         return $this->newsRepository->getNews($filters, $keyword);
     }
 
+    public function getFeaturedNews()
+    {
+        return $this->newsRepository->getFeaturedNews();
+    }
+
     public function getCategories()
     {
         return $this->newsRepository->categories();

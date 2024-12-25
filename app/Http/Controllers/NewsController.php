@@ -25,6 +25,16 @@ class NewsController extends Controller
         }
     }
 
+    public function featuredNews()
+    {
+        try {
+            $featured_news = $this->newsService->getFeaturedNews();
+            return response()->json($featured_news);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
     public function category()
     {
         try {

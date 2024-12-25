@@ -13,6 +13,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('user', [UserController::class, 'user']);
     Route::post('update', [UserController::class, 'update']);
     Route::get('fetch-news', [NewsController::class, 'fetchNews']);
+    Route::get('featured-news', [NewsController::class, 'featuredNews']);
     Route::get('category', [NewsController::class, 'category']);
     Route::get('authors', [NewsController::class, 'authors']);
     Route::post('logout', [AuthController::class, 'logout']);

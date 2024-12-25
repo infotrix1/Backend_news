@@ -26,47 +26,49 @@ class NewsRepository implements NewsRepositoryInterface
         if ($userPreferences) {
             $filters = array_merge($filters, $this->applyUserPreferences($userPreferences));
         }
-        // $news = $this->newsModel->filter($filters)->search($keyword)->get();
-        // return $news;
 
         return News::filter($filters)
         ->search($keyword)
         ->get();
     }
 
+    public function getFeaturedNews()
+    {
+        return $this->newsModel->orderBy('created_at', 'desc')->limit(5)->get();
+    }
+
     private function applyUserPreferences($userPreferences)
     {
         $filters = [];
+        $preferenceMapping = [
+            'authors' => 'author',
+            'sources' => 'source',
+            'categories' => 'category'
+        ];
 
-        // Apply author filters if they are provided in the user preferences
-        if (isset($userPreferences['authors']) && !empty($userPreferences['authors'])) {
-            $filters['author'] = $userPreferences['authors'];
-        }
-
-        // Apply source filters if they are provided in the user preferences
-        if (isset($userPreferences['sources']) && !empty($userPreferences['sources'])) {
-            $filters['source'] = $userPreferences['sources'];
-        }
-
-        // Apply category filters if they are provided in the user preferences
-        if (isset($userPreferences['categories']) && !empty($userPreferences['categories'])) {
-            $filters['category'] = $userPreferences['categories'];
+        foreach ($preferenceMapping as $key => $column) {
+            if (!empty($userPreferences[$key])) {
+                $filters[$column] = $userPreferences[$key];
+            }
         }
 
         return $filters;
     }
 
 
+    private function getDistinctColumn($column)
+    {
+        return $this->newsModel->select($column)->distinct()->get();
+    }
+
     public function categories()
     {
-        $categories = $this->newsModel->select('category')->distinct()->get();
-        return $categories;
+        return $this->getDistinctColumn('category');
     }
 
     public function authors()
     {
-        $authors = $this->newsModel->select('author')->distinct()->get();
-        return $authors;
+        return $this->getDistinctColumn('author');
     }
 }
 
