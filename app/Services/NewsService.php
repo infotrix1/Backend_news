@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Repositories\NewsRepository;
+use App\Repositories\NewsRepositoryInterface;
 use Illuminate\Support\Facades\Http;
 
 class NewsService
 {
     protected $newsRepository;
 
-    public function __construct(NewsRepository $newsRepository)
+    public function __construct(NewsRepositoryInterface $newsRepository)
     {
         $this->newsRepository = $newsRepository;
     }
