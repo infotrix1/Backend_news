@@ -7,17 +7,19 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/var/www/html
+      - ./storage:/var/www/html/storage
     networks:
       - app_network
     depends_on:
       - db
     ports:
-      - "8001:8000"
+      - "8000:8000"
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=news_db
       - MYSQL_USER=root
       - MYSQL_PASSWORD=
+    user: "www-data"
 
   db:
     image: mysql:5.7
@@ -35,17 +37,18 @@ services:
     ports:
       - "3307:3306"
 
-  queue-worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: queue_jobs
-    restart: unless-stopped
-    networks:
-      - app_network
-    depends_on:
-      - db
-    command: php artisan queue:work
+  # queue-worker:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: queue_jobs
+  #   restart: unless-stopped
+  #   networks:
+  #     - app_network
+  #   depends_on:
+  #     - db
+  #   command: php artisan queue:work
+  #   user: "www-data"
 
 networks:
   app_network:
